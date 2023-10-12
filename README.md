@@ -15,7 +15,7 @@ Too much trouble when switching models?By using "[your input] -4" to use gpt4 in
 save your template by "-savet",load it by "-load"
 
 #### what you need
-
+set OPENAI_API_KEY as environment variable.
 Python environment,with 
 ```pip
 pip install openai
@@ -24,6 +24,7 @@ pip install tiktoken
 ```
 That's just all
 
+and then,you can run ```python gpt.py``` to chat with your own gpt.
 ### want to diy more? 
 
 #### for developer
