@@ -11,7 +11,7 @@ from constants import *
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-def get_response(request: RequestBody,count=1):
+def get_response(request: RequestBody, count=1):
     try:
         response = openai.ChatCompletion.create(
             model=request.model,
@@ -28,31 +28,39 @@ def get_response(request: RequestBody,count=1):
         )
     except Exception as e:
         request.model(gpt3_long)
-        request.max_tokens=16000
-        return get_response(request,count=count+1)
+        request.max_tokens = 16000
+        sleep(6*count)
+        return get_response(request, count=count+1)
     return response
 
 
 def inputProcess(user_input, history: list, request: RequestBody):
     user_input = argsAnalyze(user_input)
-    history.append({"role": constants["current_role"], "content": user_input})
+    if user_input:
+        history.append(
+            {"role": constants["current_role"], "content": user_input})
+    else:
+        return inputProcess(betterInput() if input_pattern == "long" else input(str(i) + " > user: "), history, request)
     request.message = history
     constants["response"] = get_response(request)
-    for choice in range(request.n):
-        print(f"> ChatGPT choice {choice}: ")
-        if (request.stream):
-            stream_messages = ""
-            for chunk in constants["response"]:
-                delta = chunk['choices'][choice]['delta']
-                if 'content' in delta:
-                    print(delta['content'], end="")
-                    stream_messages += delta['content']
-            print()
-            history.append({"role": "assistant", "content": f"choice {choice}:{stream_messages}"})
-        else:
-            print(constants["response"]["choices"][choice]["message"]["content"])
+    if (request.stream):
+        stream_messages = ""
+        for chunk in constants["response"]:
+            delta = chunk['choices'][0]['delta']
+            if 'content' in delta:
+                print(delta['content'], end="")
+                stream_messages += delta['content']
+        print()
+        history.append({"role": "assistant", "content": stream_messages})
+    else:
+        for choice in request.n:
+            print(f" > chatgpt choice {choice} :")
+            print(constants["response"]["choices"]
+                  [choice]["message"]["content"])
             history.append(
-                {"role": "assistant", "content":f"choice {choice}:"+constants["response"]["choices"][choice]["message"]["content"]})
+                {"role": "assistant", "content": f"choice {choice}:" +
+                 constants["response"]["choices"][choice]["message"]["content"]})
+    return
 
 
 if __name__ == "__main__":
@@ -60,4 +68,4 @@ if __name__ == "__main__":
     while (True):
         user_input = betterInput() if input_pattern == "long" else input(str(i) + " > user: ")
         inputProcess(user_input, history, request)
-        i+=1
+        i += 1

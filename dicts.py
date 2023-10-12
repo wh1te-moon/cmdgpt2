@@ -4,14 +4,18 @@ from constants import *
 argDict = {
     "n":setn,
     "t":settempreture,
-    "save": save_template,
+    "savet": save_template,
     "load": load_template,
-    "quit": save_chat(history),
-    "exit": save_chat(history),
-    "q": save_chat(history),
+    "quit": save_chat,
+    "exit": save_chat,
+    "q": save_chat,
     "q!":exit,
     "reinput": reinput_line,
-    "4":setgpt4
+    "4":setgpt4,
+    "3":setgpt3,
+    "sys":System,
+    "user":common_user,
+    "print":lambda :betterPrint(history),
 }
 
 defaultFunc=[
