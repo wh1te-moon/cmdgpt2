@@ -1,4 +1,4 @@
-## best command line gpt
+## best command line chatgpt
 
 Diy your own gpt by making your own functions or your own shortcut key
 
