@@ -1,3 +1,9 @@
+- [best command line chatgpt](#best-command-line-chatgpt)
+  - [for common user](#for-common-user)
+    - [what you can do](#what-you-can-do)
+    - [what you need](#what-you-need)
+  - [want to diy more?](#want-to-diy-more)
+    - [for developer](#for-developer)
 ## best command line chatgpt
 
 Diy your own gpt by making your own functions or your own shortcut key
