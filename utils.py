@@ -111,8 +111,7 @@ def setgpt3():
 def longText(message):
     enc = tiktoken.get_encoding("cl100k_base")
     if (len(enc.encode(message))) > request.max_tokens:
-        request.model = gpt3_long
-        request.max_tokens = 16000
+        request.model = gpt3
     return message
 
 

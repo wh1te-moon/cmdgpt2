@@ -1,5 +1,4 @@
 import os
-import sys
 import openai
 
 from time import sleep
@@ -27,8 +26,7 @@ def get_response(request: RequestBody, count=1):
             user=request.user
         )
     except Exception as e:
-        request.model(gpt3_long)
-        request.max_tokens = 16000
+        request.model(gpt3)
         sleep(6*count)
         return get_response(request, count=count+1)
     return response
@@ -43,6 +41,7 @@ def inputProcess(user_input, history: list, request: RequestBody):
         return inputProcess(betterInput() if input_pattern == "long" else input(str(i) + " > user: "), history, request)
     request.message = history
     constants["response"] = get_response(request)
+    print(f" > chatgpt :")
     if (request.stream):
         stream_messages = ""
         for chunk in constants["response"]:

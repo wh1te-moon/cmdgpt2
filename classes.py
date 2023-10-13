@@ -2,13 +2,13 @@ from pydantic import BaseModel
 from enum import Enum
 
 user = "xhm"
-model = "gpt-3.5-turbo-0301"
+model = "gpt-4-0314"
 temperature = 0.5
 top_p = 1
 n = 1
 stream = True
 stop = None
-max_tokens = 4000
+max_tokens = None
 presense_penalty = 0
 size = "1024x1024"
 response_format = "url"
