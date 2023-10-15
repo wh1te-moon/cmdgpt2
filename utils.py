@@ -1,8 +1,52 @@
 import time
 import sys
+import openai
 
 import tiktoken
 from constants import *
+
+
+def get_response(request: RequestBody, count=1):
+    try:
+        response = openai.ChatCompletion.create(
+            model=request.model,
+            messages=request.message,
+            temperature=request.temperature,
+            top_p=request.top_p,
+            n=request.n,
+            stream=request.stream,
+            stop=request.stop,
+            max_tokens=request.max_tokens,
+            presence_penalty=request.presence_penalty,
+            logit_bias=request.logit_bias,
+            user=request.user
+        )
+    except Exception as e:
+        request.model(gpt3)
+        time.sleep(6*count)
+        return get_response(request, count=count+1)
+    return response
+
+
+def show_answer():
+    if (request.stream):
+        print(f" > chatgpt :")
+        stream_messages = ""
+        for chunk in constants["response"]:
+            delta = chunk['choices'][0]['delta']
+            if 'content' in delta:
+                print(delta['content'], end="")
+                stream_messages += delta['content']
+        print()
+        history.append({"role": "assistant", "content": stream_messages})
+    else:
+        for choice in range(request.n):
+            print(f" > chatgpt choice {choice} :")
+            print(constants["response"]["choices"]
+                  [choice]["message"]["content"])
+            history.append(
+                {"role": "assistant", "content": f"choice {choice}:" +
+                 constants["response"]["choices"][choice]["message"]["content"]})
 
 
 def setn(n):
@@ -16,7 +60,7 @@ def settempreture(t):
     request.temperature = t
 
 
-def save_chat():
+def saveChat():
     with open(
         f"./history/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.csv", mode="w", encoding="utf8"
     ) as file:
@@ -42,7 +86,14 @@ def reinput_line(target):
         print("Input error\n")
 
 
-def save_template():
+def afreshAnswer():
+    history.pop()
+    request.message = history
+    constants["response"] = get_response(request)
+    show_answer()
+
+
+def saveTemplate():
     file_name = "./template/" + \
         input("Enter file name to load the chat history:")
     with open(file_name, "w", encoding="utf8") as f:
@@ -81,6 +132,10 @@ def load_template():
         print("File not found\n")
 
 
+def longInput():
+    input_pattern[0]="long"
+    print("long input mode")
+
 def betterInput():
     print(" > user: ")
     lines = ""
@@ -89,6 +144,7 @@ def betterInput():
         if aLine == "END\n":
             break
         lines += aLine
+    input_pattern[0]=""
     return lines
 
 
