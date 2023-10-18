@@ -6,14 +6,17 @@ from dicts import argDict, conDict,defaultFunc
 def argsAnalyze(message: str):
     def replace_param(match):
         key, value1, value2 = match.groups()
-        if key in argDict:
-            if value1:
-                if (value1 in conDict):
-                    argDict[key](conDict[value1], value2)
+        try:
+            if key in argDict:
+                if value1:
+                    if (value1 in conDict):
+                        argDict[key](conDict[value1],value2) if value2 else argDict[key](conDict[value1])
+                    else:
+                        argDict[key](value1)
                 else:
-                    argDict[key](value1)
-            else:
-                argDict[key]()
+                    argDict[key]()
+        except Exception as e:
+            print(f"{key} {value1} {value2} analyze failed")
         return ''
     for i in defaultFunc:
         message=i(message=message)

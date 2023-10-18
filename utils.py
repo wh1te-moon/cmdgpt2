@@ -1,3 +1,4 @@
+import os
 import time
 import sys
 import openai
@@ -62,7 +63,7 @@ def settempreture(t):
 
 def saveChat():
     with open(
-        f"./history/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.csv", mode="w", encoding="utf8"
+        f"{historyLocation}/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.csv", mode="w", encoding="utf8"
     ) as file:
         for message in history:
             file.write(message["role"] + ": " + message["content"] + "\n\n")
@@ -94,7 +95,7 @@ def afreshAnswer():
 
 
 def saveTemplate():
-    file_name = "./template/" + \
+    file_name = f"{templateLocation}/" + \
         input("Enter file name to load the chat history:")
     with open(file_name, "w", encoding="utf8") as f:
         for message in history:
@@ -114,7 +115,7 @@ def common_user():
 def load_template():
     file_name = input("Enter file name to load the chat history: ")
     try:
-        with open("./template/"+file_name, "r", encoding="utf8") as f:
+        with open(f"{templateLocation}/"+file_name, "r", encoding="utf8") as f:
             lines = f.readlines()
             for line in lines:
                 if line.strip() != "":
@@ -173,3 +174,7 @@ def longText(message):
 
 def minBill(message):
     return message
+
+def showAllHistory():
+    for file in os.listdir(historyLocation):
+        print(file)
