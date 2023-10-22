@@ -41,4 +41,4 @@ All functions in defaultDict will run in every input.And Be sure to pass message
 
 Its paramters is like "-func para1 para2",para1 and para2 is optional.you can analyze para1 from string into a variable in constants.py by modifing conDict in dicts.py.
 
-That's all.
+That's all for something.
