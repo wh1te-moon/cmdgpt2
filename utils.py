@@ -180,6 +180,10 @@ def minBill(message):
     return message
 
 def showAllHistory():
-    for file in os.listdir(historyLocation):
-        print(file)
-        
+    for filename in os.listdir(historyLocation):
+        file_path = os.path.join(historyLocation, filename)
+    
+        if os.path.isfile(file_path):
+            with open(file_path, 'r', encoding='utf-8') as file:
+                first_line = file.readline()
+                print(f"{filename}:\n{first_line}")
