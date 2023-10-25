@@ -92,6 +92,10 @@ def afreshAnswer():
     request.message = history
     constants["response"] = get_response(request)
     show_answer()
+    
+def keepAnswering():
+    constants["response"] = get_response(request)
+    show_answer()
 
 
 def saveTemplate():
@@ -178,3 +182,4 @@ def minBill(message):
 def showAllHistory():
     for file in os.listdir(historyLocation):
         print(file)
+        

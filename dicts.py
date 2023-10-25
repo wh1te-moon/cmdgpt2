@@ -18,7 +18,8 @@ argDict = {
     "print":lambda arg:betterPrint(arg),
     "afresh":afreshAnswer,
     "long":longInput,
-    "history":showAllHistory
+    "history":showAllHistory,
+    "continue":keepAnswering
 }
 
 defaultFunc=[

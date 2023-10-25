@@ -3,7 +3,8 @@ from classes import RequestBody
 request = RequestBody()
 history = []
 constants = {"current_role": "user",
-             "response": None}
+             "response": None,
+             }
 
 input_pattern = [""]
 index = 1
