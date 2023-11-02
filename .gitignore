@@ -3,3 +3,4 @@ template/*
 __pycache__/*
 test.py
 out/*
+*.bash

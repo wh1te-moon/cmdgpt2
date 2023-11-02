@@ -1,43 +1,38 @@
+import json
 import os
 import time
 import sys
-import openai
 
-import tiktoken
+from requests import Response
+
+# import tiktoken
+# from requests import get,post,sessions
 from constants import *
 
 
-def get_response(request: RequestBody, count=1):
+def get_response(count=1):
     try:
-        response = openai.ChatCompletion.create(
-            model=request.model,
-            messages=request.message,
-            temperature=request.temperature,
-            top_p=request.top_p,
-            n=request.n,
-            stream=request.stream,
-            stop=request.stop,
-            max_tokens=request.max_tokens,
-            presence_penalty=request.presence_penalty,
-            logit_bias=request.logit_bias,
-            user=request.user
-        )
+        constants["response"] = request.get_response()
     except Exception as e:
-        request.model(gpt3)
+        request.model=gpt3
         time.sleep(6*count)
-        return get_response(request, count=count+1)
-    return response
+        get_response(request, count=count+1)
 
 
 def show_answer():
     if (request.stream):
         print(f" > chatgpt :")
         stream_messages = ""
-        for chunk in constants["response"]:
-            delta = chunk['choices'][0]['delta']
-            if 'content' in delta:
-                print(delta['content'], end="")
-                stream_messages += delta['content']
+        for chunk in constants["response"].iter_lines(decode_unicode=True):
+            try:
+                if chunk:
+                    chunk=json.loads(chunk[chunk.index('{'):])
+                    delta = chunk['choices'][0]['delta']
+                    if 'content' in delta:
+                        print(delta['content'], end="")
+                        stream_messages += delta['content']
+            except ValueError as e:
+                break
         print()
         history.append({"role": "assistant", "content": stream_messages})
     else:
@@ -169,11 +164,11 @@ def setgpt3():
     request.model = gpt3
 
 
-def longText(message):
-    enc = tiktoken.get_encoding("cl100k_base")
-    if (len(enc.encode(message))) > request.max_tokens:
-        request.model = gpt3
-    return message
+# def longText(message):
+#     enc = tiktoken.get_encoding("cl100k_base")
+#     if (len(enc.encode(message))) > request.max_tokens:
+#         request.model = gpt3
+#     return message
 
 
 def minBill(message):

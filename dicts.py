@@ -1,6 +1,8 @@
 from utils import *
 from constants import *
 
+from sys import exit
+
 argDict = {
     "n":setn,
     "t":settempreture,
@@ -19,7 +21,8 @@ argDict = {
     "afresh":afreshAnswer,
     "long":longInput,
     "history":showAllHistory,
-    "continue":keepAnswering
+    "continue":keepAnswering,
+    "help":lambda:betterPrint(argDict.keys()),
 }
 
 defaultFunc=[

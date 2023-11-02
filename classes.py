@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+import os
+import requests
 from enum import Enum
 
 user = "xhm"
@@ -26,21 +27,21 @@ class function_callChoice(str, Enum):
     auto = "auto"
 
 
-class message(BaseModel):
+class message():
     role: roleChoice
     content: str
     name: str = ""
     function_call: object = {}
 
 
-class function(BaseModel):
+class function():
     name: str = ""
     description: str = ""
     parameters: dict = {}
 
 
 ###
-class RequestBody(BaseModel):
+class RequestBody():
     model: str = model
     message: list[dict] = []
     functions: list[function] = []
@@ -55,10 +56,40 @@ class RequestBody(BaseModel):
     presence_penalty: float = presense_penalty
     logit_bias: dict = {}
     user: str = user
+    
+    def __init__(self):
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.base_url = 'https://api.openai.com/v1'
+        self.session = requests.Session()
+        self.session.headers.update({
+            'Authorization': f'Bearer {self.api_key}',
+            'Content-Type': 'application/json',
+        })
+    def get_response(self):
+        url = f'{self.base_url}/chat/completions'
+        data = {
+            "model":self.model,
+            "messages":self.message,
+            "temperature":self.temperature,
+            "top_p":self.top_p,
+            "n":self.n,
+            "stream":self.stream,
+            "stop":self.stop,
+            "max_tokens":self.max_tokens,
+            "presence_penalty":self.presence_penalty,
+            "logit_bias":self.logit_bias,
+            "user":self.user
+        }
 
+        response = self.session.post(url, json=data)
+
+        if response.status_code == 200:
+            return response
+        else:
+            raise Exception(response.status_code, response.text)
 
 ###
-class completions(BaseModel):
+class completions():
     model: str = model
     prompt: str or list[str] or list[list[str]]
     suffix: str = "null"
@@ -89,7 +120,7 @@ class responseChoice(str, Enum):
 
 
 ###
-class ImageGenerationRequest(BaseModel):
+class ImageGenerationRequest():
     prompt: str
     n: int = n
     size: sizeChoice = size
@@ -98,7 +129,7 @@ class ImageGenerationRequest(BaseModel):
 
 
 ###
-class ImageEditingRequest(BaseModel):
+class ImageEditingRequest():
     image: str
     mask: str = None
     prompt: str
@@ -109,7 +140,7 @@ class ImageEditingRequest(BaseModel):
 
 
 ###
-class ImageVariationRequest(BaseModel):
+class ImageVariationRequest():
     image: str
     n: int = n
     size: sizeChoice = size

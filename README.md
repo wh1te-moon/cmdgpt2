@@ -24,9 +24,7 @@ Save your template by "-savet",load it by "-load"
 Set OPENAI_API_KEY as environment variable.
 Python environment,with 
 ```pip
-pip install openai
-pip install pydantic
-pip install tiktoken
+pip install requests
 ```
 That's just all.
 
