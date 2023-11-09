@@ -8,25 +8,27 @@ from requests import Response
 # import tiktoken
 # from requests import get,post,sessions
 from constants import *
-from classes import RequestBody, singleContent,contentType,message,roleChoice
+from classes import RequestBody, singleContent, contentType, message, roleChoice, user
+
 
 def get_response(count=1):
     try:
         constants["response"] = request.get_response()
     except Exception as e:
-        request.model=gpt3
+        request.model = gpt3
         time.sleep(6*count)
         get_response(request, count=count+1)
 
 
 def show_answer():
     if (request.stream):
-        print(f" > chatgpt :")
+        print(f" > {request.model} :")
         stream_messages = ""
         for chunk in constants["response"].iter_lines(decode_unicode=True):
             try:
                 if chunk:
-                    chunk=json.loads(chunk[chunk.index('{'):])
+                    chunk = json.loads(chunk[chunk.index('{'):])
+                    index = chunk['choices'][0]['index']
                     delta = chunk['choices'][0]['delta']
                     if 'content' in delta:
                         print(delta['content'], end="")
@@ -37,12 +39,21 @@ def show_answer():
         history.append({"role": "assistant", "content": stream_messages})
     else:
         for choice in range(request.n):
-            print(f" > chatgpt choice {choice} :")
-            print(constants["response"]["choices"]
-                  [choice]["message"]["content"])
-            history.append(
-                {"role": "assistant", "content": f"choice {choice}:" +
-                 constants["response"]["choices"][choice]["message"]["content"]})
+            answer = json.loads(constants["response"].text)
+            print(f" > {request.model} choice {choice} :")
+            print(answer["choices"][choice]["message"]["content"])
+        if request.n > 1:
+            try:
+                temp = int(input("which one is better:"))
+                history.append(
+                    {"role": "assistant", "content": stream_messages[temp-1]})
+            except:
+                print("input error")
+                history.append(
+                    {"role": "assistant", "content": stream_messages[0]})
+        else:
+            history.append({"role": "assistant", "content": answer["choices"]
+                            [0]["message"]["content"]})
 
 
 def setn(n):
@@ -87,7 +98,8 @@ def afreshAnswer():
     request.messages = history
     constants["response"] = get_response(request)
     show_answer()
-    
+
+
 def keepAnswering():
     constants["response"] = get_response(request)
     show_answer()
@@ -133,18 +145,19 @@ def load_template():
 
 
 def longInput():
-    input_pattern[0]="long"
+    input_pattern[0] = "long"
     print("long input mode")
 
+
 def betterInput():
-    print(" > user: ")
+    print(f" > {user}: ")
     lines = ""
     while True:
         aLine = sys.stdin.readline()
         if aLine == "END\n":
             break
         lines += aLine
-    input_pattern[0]=""
+    input_pattern[0] = ""
     return lines
 
 
@@ -174,17 +187,18 @@ def setgpt3():
 def minBill(message):
     return message
 
+
 def showAllHistory():
     for filename in os.listdir(historyLocation):
         file_path = os.path.join(historyLocation, filename)
-    
+
         if os.path.isfile(file_path):
             with open(file_path, 'r', encoding='utf-8') as file:
                 first_line = file.readline()
                 print(f"{filename}:\n{first_line}")
-                
+
 
 def imageInput(imageUrl):
-    while(os.path.exists(imageUrl) is not True):
-        imageUrl=input("image not found,enter image path:")
-    history[-1].addContent(singleContent(imageUrl,contentType.image_url))
+    while (os.path.exists(imageUrl) is not True):
+        imageUrl = input("image not found,enter image path:")
+    history[-1].addContent(singleContent(imageUrl, contentType.image_url))

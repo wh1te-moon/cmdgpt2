@@ -9,9 +9,9 @@ model = "gpt-4-vision-preview"
 temperature = 0.5
 top_p = 1
 n = 1
-stream = False
+stream = True
 stop = None
-max_tokens = 128000
+max_tokens = None
 logit_bias = None
 presense_penalty = 0
 size = "1024x1024"
@@ -61,15 +61,16 @@ class message(dict):
     name: str = ""
     function_call: object = None
 
-    def __init__(self,user=roleChoice.user, name=user):
+    def __init__(self, user=roleChoice.user, name=user):
         self.role = user
         self.name = name
         self["role"] = user
         self["name"] = name
 
-    def addContent(self,content:singleContent):
+    def addContent(self, content: singleContent):
         self.content.append(content)
         self["content"] = self.content
+
 
 class function():
     name: str = ""
