@@ -69,7 +69,7 @@ def settempreture(t):
 
 def saveChat():
     with open(
-        f"{historyLocation}/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.csv", mode="w", encoding="utf8"
+        f"{historyLocation}/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.txt", mode="w", encoding="utf8"
     ) as file:
         for message in history:
             file.write(message["role"] + ": " + message["content"] + "\n\n")
