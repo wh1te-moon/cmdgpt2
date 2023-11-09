@@ -20,10 +20,10 @@ def argsAnalyze(message: str):
         return ''
     for i in defaultFunc:
         message=i(message=message)
-    param_pattern = '-(\w+)\s*([\w.]*)\s*([\w.]*)'
+    param_pattern = '-(\w+)\s*([\w./:]*)\s*([\w./:]*)'
     message = re.sub(param_pattern, replace_param, message)
     return message
 
 
 # if __name__ == "__main__":
-#     print(argsAnalyze("hello -t odjad cohia -i acio -a"))
+#     print(argsAnalyze("-i c:\\Users\\xhm\\Pictures\\Screenshots\\屏幕截图 2023-11-06 213646.png"))

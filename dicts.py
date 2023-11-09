@@ -23,6 +23,7 @@ argDict = {
     "history":showAllHistory,
     "continue":keepAnswering,
     "help":lambda:betterPrint(argDict.keys()),
+    "i":imageInput,
 }
 
 defaultFunc=[

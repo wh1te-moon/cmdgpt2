@@ -8,7 +8,7 @@ from requests import Response
 # import tiktoken
 # from requests import get,post,sessions
 from constants import *
-
+from classes import RequestBody, singleContent,contentType,message,roleChoice
 
 def get_response(count=1):
     try:
@@ -84,7 +84,7 @@ def reinput_line(target):
 
 def afreshAnswer():
     history.pop()
-    request.message = history
+    request.messages = history
     constants["response"] = get_response(request)
     show_answer()
     
@@ -182,3 +182,9 @@ def showAllHistory():
             with open(file_path, 'r', encoding='utf-8') as file:
                 first_line = file.readline()
                 print(f"{filename}:\n{first_line}")
+                
+
+def imageInput(imageUrl):
+    while(os.path.exists(imageUrl) is not True):
+        imageUrl=input("image not found,enter image path:")
+    history[-1].addContent(singleContent(imageUrl,contentType.image_url))

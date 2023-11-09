@@ -1,7 +1,7 @@
-from classes import RequestBody
+from classes import RequestBody,message
 
 request = RequestBody()
-history = []
+history:list[message] = []
 constants = {
     "current_role": "user",
     "response": None,

@@ -1,17 +1,17 @@
-from classes import RequestBody
+from classes import RequestBody,singleContent,message
 from utils import betterInput, get_response, show_answer
 from argsAnalyze import argsAnalyze
 from constants import *
 
 
-def inputProcess(user_input, history: list, request: RequestBody):
-    user_input = argsAnalyze(user_input)
+def inputProcess(user_input:str, history: list[message], request: RequestBody):
+    history.append(message())
+    user_input = argsAnalyze(user_input.replace("\\", "/"))
     if user_input:
-        history.append(
-            {"role": constants["current_role"], "content": user_input})
+        history[-1].addContent(singleContent(user_input))
     else:
         return inputProcess(betterInput() if input_pattern[0] == "long" else input(str(index) + " > user: "), history, request)
-    request.message = history
+    request.messages = history
     get_response(request)
     show_answer()
     return
