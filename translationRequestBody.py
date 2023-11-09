@@ -23,24 +23,25 @@ class translationRequestBody():
         self.session = requests.session()
         self.session.headers.update({
             'Authorization': f'Bearer {self.apiKey}',
-            'Content-Type': 'multipart/form-data',
+            # 'Content-Type': 'multipart/form-data',
         })
 
     def get_response(self):
         url = f'{self.baseUrl}/audio/translations'
         data = {
-            "model": self.model,
-            "prompt": self.propmt,
-            "response_format": self.responseFormat,
-            "temperature": self.temperature,
+            "file": open(self.file, "rb"),
+            # "name": os.path.basename(self.file),
+            "model": (None,self.model),
+            "response_format": (None,self.responseFormat),
+            "temperature": (None,str(self.temperature)),
         }
-        # error
-        # response = self.session.post(url, json=data, files={'file': (os.path.basename(self.file), open(self.file, 'rb'), 'application/octet-stream'),
-        #                                                     'json': (None, json.dumps(data), 'application/json'), })
-        # if response.status_code == 200:
-        #     return response
-        # else:
-        #     raise Exception(response.status_code, response.text)
+        if self.propmt:
+            data["propmt"]=self.propmt
+        response = self.session.post(url, files=data)
+        if response.status_code == 200:
+            return response
+        else:
+            raise Exception(response.status_code, response.text)
 
 
 if __name__ == "__main__":
