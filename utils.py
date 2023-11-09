@@ -8,21 +8,22 @@ from requests import Response
 # import tiktoken
 # from requests import get,post,sessions
 from constants import *
-from classes import RequestBody, singleContent, contentType, message, roleChoice, user
+from chatRequestBody import chatRequestBody, singleContent, contentType, message, roleChoice
+from classConfig import user
 
 
 def get_response(count=1):
     try:
-        constants["response"] = request.get_response()
+        constants["response"] = chatRequest.get_response()
     except Exception as e:
-        request.model = gpt3
+        chatRequest.model = gpt3
         time.sleep(6*count)
-        get_response(request, count=count+1)
+        get_response(chatRequest, count=count+1)
 
 
 def show_answer():
-    if (request.stream):
-        print(f" > {request.model} :")
+    if (chatRequest.stream):
+        print(f" > {chatRequest.model} :")
         stream_messages = ""
         for chunk in constants["response"].iter_lines(decode_unicode=True):
             try:
@@ -38,11 +39,11 @@ def show_answer():
         print()
         history.append({"role": "assistant", "content": stream_messages})
     else:
-        for choice in range(request.n):
+        for choice in range(chatRequest.n):
             answer = json.loads(constants["response"].text)
-            print(f" > {request.model} choice {choice} :")
+            print(f" > {chatRequest.model} choice {choice} :")
             print(answer["choices"][choice]["message"]["content"])
-        if request.n > 1:
+        if chatRequest.n > 1:
             try:
                 temp = int(input("which one is better:"))
                 history.append(
@@ -58,13 +59,13 @@ def show_answer():
 
 def setn(n):
     n = int(n)
-    request.n = n
-    request.stream = False if n >= 2 else True
+    chatRequest.n = n
+    chatRequest.stream = False if n >= 2 else True
 
 
 def settempreture(t):
     t = float(t)
-    request.temperature = t
+    chatRequest.temperature = t
 
 
 def saveChat():
@@ -95,13 +96,13 @@ def reinput_line(target):
 
 def afreshAnswer():
     history.pop()
-    request.messages = history
-    constants["response"] = get_response(request)
+    chatRequest.messages = history
+    constants["response"] = get_response(chatRequest)
     show_answer()
 
 
 def keepAnswering():
-    constants["response"] = get_response(request)
+    constants["response"] = get_response(chatRequest)
     show_answer()
 
 
@@ -170,11 +171,11 @@ def betterPrint(arg):
 
 
 def setgpt4():
-    request.model = gpt4
+    chatRequest.model = gpt4
 
 
 def setgpt3():
-    request.model = gpt3
+    chatRequest.model = gpt3
 
 
 # def longText(message):

@@ -33,5 +33,5 @@ defaultFunc=[
 
 conDict = {
     "history": history,
-    "request": request,
+    "request": chatRequest,
 }

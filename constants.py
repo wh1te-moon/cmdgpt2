@@ -1,6 +1,9 @@
-from classes import RequestBody,message
+from chatRequestBody import chatRequestBody,message
+from audioRequestBody import audioRequestBody
 
-request = RequestBody()
+chatRequest = chatRequestBody()
+audioRequest = audioRequestBody()
+
 history:list[message] = []
 constants = {
     "current_role": "user",
