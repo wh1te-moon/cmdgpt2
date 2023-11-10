@@ -192,6 +192,14 @@ def setgpt3():
 
 
 def minBill(message):
+    """default func
+
+    Args:
+        message (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return message
 
 
