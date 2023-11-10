@@ -70,10 +70,16 @@ def settempreture(t):
 
 def saveChat():
     with open(
-        f"{historyLocation}/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.txt", mode="w", encoding="utf8"
+        f"{historyLocation}/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.md", mode="w", encoding="utf8"
     ) as file:
         for message in history:
-            file.write(message["role"] + ": " + message["content"] + "\n\n")
+            file.write(f"{message['role']}:")
+            for singleContent in message["content"]:
+                if(singleContent["type"]==contentType.text):
+                    file.write(singleContent["text"])
+                else:
+                    file.write("![]{"+singleContent['image_url']+'}')
+            file.write("\n\n")
     print("save success")
     exit()
 
