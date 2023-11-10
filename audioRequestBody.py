@@ -3,7 +3,7 @@ import requests
 
 from sys import exit
 
-from classConfig import audioModel, voice, audioResponseFormat, speed, baseUrl
+from classConfig import audioModel, voice, audioResponseFormat, speed, baseUrl,apiKey
 
 
 class audioRequestBody():
@@ -15,7 +15,7 @@ class audioRequestBody():
 
     def __init__(self) -> None:
         self.baseUrl = baseUrl
-        self.apiKey = os.environ["OPENAI_API_KEY"]
+        self.apiKey = apiKey
         if self.apiKey is None:
             print("OPENAI_API_KEY environment variable not found.")
             exit()
