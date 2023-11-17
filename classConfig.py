@@ -3,14 +3,14 @@ import os
 
 user = "xhm"
 
-
-chatModel = "gpt-4-vision-preview"
+#gpt-4-1106-preview gpt-4-vision-preview
+chatModel = "gpt-4-1106-preview"
 chatTemperature = 0.5
 top_p = 1
 n = 1
 stream = True
 stop = None
-max_tokens = None
+max_tokens = 4096
 logit_bias = None
 presense_penalty = 0
 

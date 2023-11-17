@@ -39,6 +39,7 @@ class audioRequestBody():
         if response.status_code == 200:
             with open("audio.mp3", "wb") as f:
                 f.write(response.content)
+            response.encoding='utf8'
             return response
         else:
             raise Exception(response.status_code, response.text)

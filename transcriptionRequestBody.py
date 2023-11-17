@@ -7,7 +7,7 @@ from sys import exit
 from classConfig import apiKey, translationModel, translationResponseFormat, translationTemprature, baseUrl
 
 
-class translationRequestBody():
+class transcriptionRequestBody():
     file: str
     model: str = translationModel
     propmt: str = None
@@ -27,7 +27,7 @@ class translationRequestBody():
         })
 
     def get_response(self):
-        url = f'{self.baseUrl}/audio/translations'
+        url = f'{self.baseUrl}/audio/transcriptions'
         data = {
             "file": open(self.file, "rb"),
             # "name": os.path.basename(self.file),
@@ -39,13 +39,14 @@ class translationRequestBody():
             data["propmt"]=self.propmt
         response = self.session.post(url, files=data)
         if response.status_code == 200:
+            response.encoding='utf8'
             return response
         else:
             raise Exception(response.status_code, response.text)
 
 
 if __name__ == "__main__":
-    a = translationRequestBody()
+    a = transcriptionRequestBody()
     a.file = "./audio.mp3"
     a.get_response()
     print(a.get_response().text)

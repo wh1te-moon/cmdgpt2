@@ -118,6 +118,7 @@ class chatRequestBody():
         response = self.session.post(url, json=data)
 
         if response.status_code == 200:
+            response.encoding='utf8'
             return response
         else:
             raise Exception(response.status_code, response.text)
