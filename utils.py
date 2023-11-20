@@ -75,7 +75,7 @@ def saveChat():
         for message in history:
             file.write(f"{message['role']}:")
             for singleContent in message["content"]:
-                if(singleContent["type"]==contentType.text):
+                if (singleContent["type"] == contentType.text):
                     file.write(singleContent["text"])
                 else:
                     file.write("![]{"+singleContent['image_url']+'}')
@@ -160,10 +160,11 @@ def betterInput():
     print(f" > {user}: ")
     lines = ""
     while True:
-        aLine = sys.stdin.readline()
-        if aLine == "END\n":
+        aLine = input()
+        if aLine == "END":
             break
         lines += aLine
+        lines += '\n'
     input_pattern[0] = ""
     return lines
 
