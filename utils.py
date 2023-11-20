@@ -69,18 +69,20 @@ def settempreture(t):
     chatRequest.temperature = t
 
 def save(file:TextIOWrapper):
-    for message in history[:-1]:
-            file.write(f"{message['role']}:")
-            if type(message["content"])==str:
-                file.write(message["content"])
-            else:
-                for singleContent in message["content"]:
-                    # maybe switch is better
-                    if (singleContent["type"] == contentType.text):
-                        file.write(singleContent["text"])
-                    else:
-                        file.write("![]{"+singleContent['image_url']+'}')
-            file.write("\n\n")
+    for message in history:
+        if not message["content"]:
+            break
+        file.write(f"{message['role']}:")
+        if type(message["content"])==str:
+            file.write(message["content"])
+        else:
+            for singleContent in message["content"]:
+                # maybe switch is better
+                if (singleContent["type"] == contentType.text):
+                    file.write(singleContent["text"])
+                else:
+                    file.write("![]{"+singleContent['image_url']+'}')
+        file.write("\n\n")
 
 def saveChat():
     with open(

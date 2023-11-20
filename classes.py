@@ -11,6 +11,11 @@ class ClearableList(list):
         except:
             raise StopIteration
 
+# a=ClearableList([1,24,65,124,4,5])
+# for i in range(len(a)):
+#     print(a[i])
+# print(a)
+
 class completions():
     model: str = chatModel
     prompt: str or list[str] or list[list[str]]

@@ -1,17 +1,17 @@
-from chatRequestBody import chatRequestBody,message
+from chatRequestBody import chatRequestBody, message
 from audioRequestBody import audioRequestBody
 from classes import ClearableList
 
 chatRequest = chatRequestBody()
 audioRequest = audioRequestBody()
 
-history:list[message] = []
+history: list[message] = []
 constants = {
     "current_role": "user",
     "response": None,
 }
 
-waitList=ClearableList([])
+waitList = ClearableList([])
 
 input_pattern = [""]
 
