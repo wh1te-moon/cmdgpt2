@@ -11,6 +11,8 @@ def inputProcess(user_input:str, history: list[message], request: chatRequestBod
     else:
         return inputProcess(betterInput() if input_pattern[0] == "long" else input(str(index) + f" > {user}: "), history, request)
     request.messages = history
+    for func in waitList:
+        func()
     get_response(request)
     show_answer()
     return

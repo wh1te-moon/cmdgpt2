@@ -1,3 +1,4 @@
+from io import TextIOWrapper
 import json
 import os
 import time
@@ -67,19 +68,25 @@ def settempreture(t):
     t = float(t)
     chatRequest.temperature = t
 
+def save(file:TextIOWrapper):
+    for message in history[:-1]:
+            file.write(f"{message['role']}:")
+            if type(message["content"])==str:
+                file.write(message["content"])
+            else:
+                for singleContent in message["content"]:
+                    # maybe switch is better
+                    if (singleContent["type"] == contentType.text):
+                        file.write(singleContent["text"])
+                    else:
+                        file.write("![]{"+singleContent['image_url']+'}')
+            file.write("\n\n")
 
 def saveChat():
     with open(
         f"{historyLocation}/{time.asctime( time.localtime(time.time())).replace(' ','_').replace(':','_')}.md", mode="w", encoding="utf8"
     ) as file:
-        for message in history:
-            file.write(f"{message['role']}:")
-            for singleContent in message["content"]:
-                if (singleContent["type"] == contentType.text):
-                    file.write(singleContent["text"])
-                else:
-                    file.write("![]{"+singleContent['image_url']+'}')
-            file.write("\n\n")
+        save(file)
     print("save success")
     exit()
 
@@ -115,10 +122,8 @@ def keepAnswering():
 def saveTemplate():
     file_name = f"{templateLocation}/" + \
         input("Enter file name to load the chat history:")
-    with open(file_name, "w", encoding="utf8") as f:
-        for message in history:
-            if (message['role'] == 'user'):
-                f.write(message["role"] + ": " + message["content"] + "\n")
+    with open(file_name, "w", encoding="utf8") as file:
+        save(file)
     print("Chat history saved successfully\n")
 
 
@@ -142,10 +147,10 @@ def load_template():
                             {"role": "user", "content": line[5:].strip()})
                     elif line[0] == "a":
                         history.append(
-                            {"role": "assistant", "content": line[5:].strip()})
+                            {"role": "assistant", "content": line[9:].strip()})
                     else:
                         history.append(
-                            {"role": "system", "content": line[7:].strip()})
+                            {"role": "system", "content": line[6:].strip()})
             print("Chat history loaded successfully")
     except FileNotFoundError:
         print("File not found\n")

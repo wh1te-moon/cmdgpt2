@@ -6,7 +6,7 @@ from sys import exit
 argDict = {
     "n":setn,
     "t":settempreture,
-    "savet": saveTemplate,
+    "savet": lambda:waitList.append(saveTemplate),
     "loadt": load_template,
     "quit": saveChat,
     "exit": saveChat,

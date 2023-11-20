@@ -1,6 +1,16 @@
 from enum import Enum
 from classConfig import user, chatModel, chatTemperature, top_p, n, stream, stop, max_tokens, logit_bias, presense_penalty, size, imageResponseFormat
 
+class ClearableList(list):
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            return self.pop()
+        except:
+            raise StopIteration
+
 class completions():
     model: str = chatModel
     prompt: str or list[str] or list[list[str]]
