@@ -41,8 +41,8 @@ class singleContent(dict):
             with open(text_url, "rb") as image_file:
                 self.image_url = {
                     "url": f"data:image/png;base64,{base64.b64encode(image_file.read()).decode('utf-8')}"}
-                self["type"] = contentType.image_url
-                self["image_url"] = self.image_url
+            self["type"] = contentType.image_url
+            self["image_url"] = self.image_url
 
 
 class message(dict):
