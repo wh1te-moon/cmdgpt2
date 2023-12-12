@@ -4,7 +4,7 @@ import os
 user = "xhm"
 
 #gpt-4-1106-preview gpt-4-vision-preview
-chatModel = "gpt-4-1106-preview"
+chatModel = "gpt-4-vision-preview"
 chatTemperature = 0.5
 top_p = 1
 n = 1

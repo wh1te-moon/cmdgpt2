@@ -48,14 +48,15 @@ class singleContent(dict):
 class message(dict):
     role: roleChoice
     content: list[singleContent] = []
-    name: str = ""
+    # name: str = ""
     function_call: object = None
 
     def __init__(self, user=roleChoice.user, name=user):
         self.role = user
-        self.name = name
+        # self.name = name
         self["role"] = user
-        self["name"] = name
+        self.content=[]
+        # self["name"] = name
 
     def addContent(self, content: singleContent):
         self.content.append(content)

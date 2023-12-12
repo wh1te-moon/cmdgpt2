@@ -68,12 +68,16 @@ def settempreture(t):
     t = float(t)
     chatRequest.temperature = t
 
-def save(file:TextIOWrapper):
+
+def save(file: TextIOWrapper):
     for message in history:
-        if not message["content"]:
+        try:
+            if not message["content"]:
+                break
+        except:
             break
         file.write(f"{message['role']}:")
-        if type(message["content"])==str:
+        if type(message["content"]) == str:
             file.write(message["content"])
         else:
             for singleContent in message["content"]:
@@ -83,6 +87,7 @@ def save(file:TextIOWrapper):
                 else:
                     file.write("![]{"+singleContent['image_url']+'}')
         file.write("\n\n")
+
 
 def saveChat():
     with open(
@@ -225,3 +230,25 @@ def imageInput(imageUrl):
     while (os.path.exists(imageUrl) is not True):
         imageUrl = input("image not found,enter image path:")
     history[-1].addContent(singleContent(imageUrl, contentType.image_url))
+
+
+def fineTuningData(filename, questions, answers):
+    with open(filename, "w+", encoding="utf8") as f:
+        for i in range(len(answers)):
+            d: list[message] = []
+            d.append(message(roleChoice.system))
+            d[-1].addContent(singleContent("你是一个网店客服"))
+            d.append(message())
+            d[-1].addContent(singleContent(questions[i]))
+            d.append(message(roleChoice.assistant))
+            answer = ""
+            for j in answers[i]:
+                answer += j if j else ""
+            if not answer:
+                continue
+            d[-1].addContent(singleContent(answer))
+            for t in d:
+                t.content = t.content[0].text
+                t["content"] = t.content
+            data = {"messages": d}
+            f.write(json.dumps(data, ensure_ascii=False)+"\n")
