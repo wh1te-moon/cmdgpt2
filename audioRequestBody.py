@@ -37,8 +37,8 @@ class audioRequestBody():
         response = self.session.post(url, json=data)
 
         if response.status_code == 200:
-            with open("audio.mp3", "wb") as f:
-                f.write(response.content)
+            # with open("./audio_cache/audio.mp3", "wb") as f:
+            #     f.write(response.content)
             response.encoding='utf8'
             return response
         else:

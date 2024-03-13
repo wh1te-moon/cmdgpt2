@@ -178,6 +178,7 @@ def betterInput():
         lines += aLine
         lines += '\n'
     input_pattern[0] = ""
+    print("LONG INPUT END")
     return lines
 
 

@@ -27,7 +27,7 @@ class completions():
     stream: bool = stream
     logprobs: int = None
     echo: bool = False
-    stop: str or list[str] = stop
+    stop: str or list[str] = stop # type: ignore
     presence_penalty: float = presense_penalty
     frequency_penalty: float = 0
     best_of: int = 1
