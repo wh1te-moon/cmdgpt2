@@ -1,23 +1,47 @@
-from chatRequestBody import chatRequestBody, message
+import time
+import numpy as np
+import whisper
+import pyaudio
+
+from chatRequestBody import chatRequestBody, Message
 from audioRequestBody import audioRequestBody
 from classes import ClearableList
 
-chatRequest = chatRequestBody()
-audioRequest = audioRequestBody()
+class Constants:
+    def __init__(self) -> None:
+        self.chatRequest = chatRequestBody()
+        self.audioRequest = audioRequestBody()
+        self.history: list[Message] = []
+        self.cons = {
+            "current_role": "user",
+            "response": None,
+        }
+        
+        self.audioRecorder=pyaudio.PyAudio()
+        self.audioPlayer=pyaudio.PyAudio()
+        
+        self.audio_segments=[]
+        self.audio_data = []
+        self.last_active_time = time.time()
+        self.audioRecording=True
 
-history: list[message] = []
-constants = {
-    "current_role": "user",
-    "response": None,
-}
+        self.waitList = ClearableList([])
 
-waitList = ClearableList([])
+        self.input_pattern = [""]
 
-input_pattern = [""]
+        self.index = 1
+        self.gpt3 = "gpt-4o-mini"
+        self.gpt4 = "gpt-4o-mini"
 
-index = 1
-gpt3 = "gpt-3.5-turbo-16k-0613"
-gpt4 = "gpt-4-vision-preview"
+        self.historyLocation = "./history"
+        self.templateLocation = "./template"
 
-historyLocation = "./history"
-templateLocation = "./template"
+        self.model = whisper.load_model("small.en", device="cuda")
+        
+constants = Constants()
+
+if __name__=="__main__":
+    p = pyaudio.PyAudio()
+    for i in range(p.get_device_count()):
+        dev = p.get_device_info_by_index(i)
+        print((i,dev['name'],dev['maxInputChannels']))

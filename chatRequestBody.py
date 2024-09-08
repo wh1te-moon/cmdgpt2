@@ -45,7 +45,7 @@ class singleContent(dict):
             self["image_url"] = self.image_url
 
 
-class message(dict):
+class Message(dict):
     role: roleChoice
     content: list[singleContent] = []
     # name: str = ""
@@ -55,7 +55,7 @@ class message(dict):
         self.role = user
         # self.name = name
         self["role"] = user
-        self.content=[]
+        self.content = []
         # self["name"] = name
 
     def addContent(self, content: singleContent):
@@ -72,7 +72,7 @@ class function():
 ###
 class chatRequestBody():
     model: str = chatModel
-    messages: list[message] = []
+    messages: list[Message] = []
     functions: list[function] = []
     function_call: function_callChoice = "none"
     temperature: float = chatTemperature
@@ -119,7 +119,7 @@ class chatRequestBody():
         response = self.session.post(url, json=data)
 
         if response.status_code == 200:
-            response.encoding='utf8'
+            response.encoding = 'utf8'
             return response
         else:
             raise Exception(response.status_code, response.text)

@@ -1,5 +1,5 @@
 from enum import Enum
-from classConfig import user, chatModel, chatTemperature, top_p, n, stream, stop, max_tokens, logit_bias, presense_penalty, size, imageResponseFormat
+from classConfig import user, chatModel, chatTemperature, top_p, n, stream, stop, max_tokens, presense_penalty, size, imageResponseFormat
 
 class ClearableList(list):
     def __iter__(self):

@@ -1,37 +1,38 @@
-from utils import *
-from constants import *
+from Utils import Utils
+from constants import constants
 
 from sys import exit
 
 argDict = {
-    "n":setn,
-    "t":settempreture,
-    "savet": lambda:waitList.append(saveTemplate),
-    "loadt": load_template,
-    "quit": saveChat,
-    "exit": saveChat,
-    "q": saveChat,
+    "n":Utils.setn,
+    "t":Utils.settempreture,
+    "savet": lambda:constants.waitList.append(Utils.saveTemplate),
+    "loadt": Utils.load_template,
+    "quit": Utils.saveChat,
+    "exit": Utils.saveChat,
+    "q": Utils.saveChat,
     "q!":exit,
-    "reinput": lambda target:reinput_line(target),
-    "4":setgpt4,
-    "3":setgpt3,
-    "sys":System,
-    "user":common_user,
-    "print":lambda arg:betterPrint(arg),
-    "afresh":afreshAnswer,
-    "long":longInput,
-    "history":showAllHistory,
-    "continue":keepAnswering,
-    "help":lambda:betterPrint(argDict.keys()),
-    "i":imageInput,
+    "reinput": lambda target:Utils.reinput_line(target),
+    "4":Utils.setgpt4,
+    "3":Utils.setgpt3,
+    "sys":Utils.System,
+    "user":Utils.common_user,
+    "print":lambda arg:Utils.betterPrint(arg),
+    "afresh":Utils.afreshAnswer,
+    "long":Utils.longInput,
+    "history":Utils.showAllHistory,
+    "continue":Utils.keepAnswering,
+    "help":lambda:Utils.betterPrint(argDict.keys()),
+    "i":Utils.imageInput,
 }
 
 defaultFunc=[
     # longText,
     # minBill
+    Utils.transfer_slash,
 ]
 
 conDict = {
-    "history": history,
-    "request": chatRequest,
+    "history": constants.history,
+    "request": constants.chatRequest,
 }
