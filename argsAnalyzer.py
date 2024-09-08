@@ -3,8 +3,8 @@ import re
 from dicts import argDict, conDict, defaultFunc
 
 
-def argsAnalyzer(message: str):
-    def replace_param(match):
+def argsAnalyzer(inputStr: str):
+    def replace_param(match:re.Match):
         key, value1, value2 = match.groups()
         try:
             if key in argDict:
@@ -20,12 +20,12 @@ def argsAnalyzer(message: str):
             print(f"{key} {value1} {value2} analyze failed")
         return ''
     for i in defaultFunc:
-        message = i(m=message)
+        inputStr = i(inputStr)
     # param_pattern = '-([\w!]+)\s*([\w./:\\\\]*)\s*([\w./:\\\\]*)'
     param_pattern = '-([\w!]+)\s*([\w./:-]*)\s*([\w./:-]*)'
-    message = re.sub(param_pattern, replace_param, message)
-    return message
+    inputStr = re.sub(param_pattern, replace_param, inputStr)
+    return inputStr
 
 
 if __name__ == "__main__":
-    print(argsAnalyzer(r"-q"))
+    print(argsAnalyzer("\n"))

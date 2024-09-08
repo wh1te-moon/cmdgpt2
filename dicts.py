@@ -1,5 +1,5 @@
 from Utils import Utils
-from constants import constants
+from Constants import constants
 
 from sys import exit
 
@@ -7,7 +7,7 @@ argDict = {
     "n":Utils.setn,
     "t":Utils.settempreture,
     "savet": lambda:constants.waitList.append(Utils.saveTemplate),
-    "loadt": Utils.load_template,
+    "loadt": Utils.loadTemplate,
     "quit": Utils.saveChat,
     "exit": Utils.saveChat,
     "q": Utils.saveChat,

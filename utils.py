@@ -11,7 +11,7 @@ from requests import Response
 
 # import tiktoken
 # from requests import get,post,sessions
-from constants import constants
+from Constants import constants
 from chatRequestBody import chatRequestBody, singleContent, contentType, Message, roleChoice
 from classConfig import user, threshold
 
@@ -168,23 +168,42 @@ class Utils:
         constants.cons["current_role"] = "user"
 
     @staticmethod
-    def load_template():
+    def loadTemplate():
         file_name = input("Enter file name to load the chat history: ")
         try:
-            with open(f"{constants.templateLocation}/"+file_name, "r", encoding="utf8") as f:
-                lines = f.readlines()
-                for line in lines:
-                    if line.strip() != "":
-                        if line[0] == "u":
-                            constants.history.append(
-                                {"role": "user", "content": line[5:].strip()})
-                        elif line[0] == "a":
-                            constants.history.append(
-                                {"role": "assistant", "content": line[9:].strip()})
-                        else:
-                            constants.history.append(
-                                {"role": "system", "content": line[6:].strip()})
+            with open(f"{constants.templateLocation}/{file_name}", "r", encoding="utf8") as f:
+                content = f.read()
+                
+                # Splitting the file content based on role indicators
+                sections = content.splitlines()
+                role, buffer = None, []
+                
+                for line in sections:
+                    # Identify the role and reset the buffer
+                    if line.startswith("user:"):
+                        if buffer:  # If buffer is not empty, append the previous role's content
+                            constants.history.append({"role": role, "content": "\n".join(buffer).strip()})
+                        role = "user"
+                        buffer = [line[5:].strip()]  # Start new buffer for the role's content
+                    elif line.startswith("assistant:"):
+                        if buffer:
+                            constants.history.append({"role": role, "content": "\n".join(buffer).strip()})
+                        role = "assistant"
+                        buffer = [line[9:].strip()]
+                    elif line.startswith("system:"):
+                        if buffer:
+                            constants.history.append({"role": role, "content": "\n".join(buffer).strip()})
+                        role = "system"
+                        buffer = [line[7:].strip()]
+                    else:
+                        buffer.append(line)  # Accumulate content if it's a continuation of the current role
+                
+                # Append the last role's content if there's anything left
+                if buffer:
+                    constants.history.append({"role": role, "content": "\n".join(buffer).strip()})
+                    
                 print("Chat history loaded successfully")
+
         except FileNotFoundError:
             print("File not found\n")
 
@@ -247,7 +266,7 @@ class Utils:
                                          contentType.image_url))
 
     @staticmethod
-    def transfer_slash(m: Message):
+    def transfer_slash(m: str) -> str:
         return m.replace("\\", "/")
 
     # def fineTuningData(filename, questions, answers):
@@ -319,7 +338,7 @@ class Utils:
         audio = constants.audioRequest.get_response(text)
         audio_bytes_stream = b""
         stream = constants.audioPlayer.open(
-            output=True, channels=1, rate=24000, format=pyaudio.paInt16,output_device_index=3)
+            output=True, channels=1, rate=24000, format=pyaudio.paInt16, output_device_index=3)
         stream.start_stream()
         for chunk in audio.iter_content(chunk_size=2048):
             if chunk:
@@ -356,11 +375,12 @@ class Utils:
                     constants.audio_data = []
                 else:
                     # should not happen
-                    pass
-                if now - constants.last_active_time > 3:
+                    raise Exception("no audio data")
+                
+                if now - constants.last_active_time > 2.5:
                     constants.audioRecording = False
                 else:
-                    # if interruption lasts less than 3 seconds, do nothing
+                    # if interruption lasts less than 2.5 seconds, do nothing
                     pass
             else:
                 constants.audio_data.append(in_data)
@@ -400,16 +420,17 @@ if __name__ == "__main__":
     #     print(text)
 
     # asyncio.run(main())
-    audio = constants.audioRequest.get_response("Hello! Yes, I can \"hear\" you in the sense that I can read and respond to your messages. How can I assist you today?")
+    audio = constants.audioRequest.get_response(
+        "Hello! Yes, I can \"hear\" you in the sense that I can read and respond to your messages. How can I assist you today?")
     audio_bytes_stream = b""
     stream = constants.audioPlayer.open(
-        output=True, channels=1, rate=24000, format=pyaudio.paInt16,output_device_index=3)
+        output=True, channels=1, rate=24000, format=pyaudio.paInt16, output_device_index=3)
     stream.start_stream()
     for chunk in audio.iter_content(chunk_size=2048):
         if chunk:
             stream.write(chunk)
             audio_bytes_stream += chunk
-    
+
     # with open("testaudio.wav", "rb") as f:
     #     audio = f.read()
     #     stream.write(audio)

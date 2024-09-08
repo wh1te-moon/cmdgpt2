@@ -36,7 +36,7 @@ class Constants:
         self.historyLocation = "./history"
         self.templateLocation = "./template"
 
-        self.model = whisper.load_model("small.en", device="cuda")
+        # self.model = whisper.load_model("small.en", device="cuda")
         
 constants = Constants()
 
